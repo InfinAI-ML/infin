@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface NavbarProps {
   isSignedIn: boolean;
@@ -11,6 +11,54 @@ interface NavbarProps {
 
 const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        /* Hide Clerk branding */
+        .cl-userButtonPopoverFooter,
+        div[id^="cl-internal"] > div:has(> a[href*="clerk.com"]) {
+          display: none !important;
+        }
+        
+        /* Improve dark theme styling for popup */
+        .cl-userButtonPopover, .cl-userButtonPopoverCard {
+          background-color: #1F2937 !important;
+          color: #F9FAFB !important;
+          border-color: #374151 !important;
+        }
+        
+        /* Fix text colors in popover */
+        .cl-userButtonPopoverActionButton, 
+        .cl-userButtonPopoverActionButtonText,
+        .cl-userPreviewTextContainer p,
+        .cl-userPreviewMainIdentifier,
+        .cl-userPreviewSecondaryIdentifier {
+          color: #F9FAFB !important;
+        }
+        
+        /* Style hover states for buttons */
+        .cl-userButtonPopoverActionButton:hover {
+          background-color: #374151 !important;
+        }
+      `;
+      document.head.appendChild(style);
+      
+      return () => {
+        document.head.removeChild(style);
+      };
+    }
+  }, [isSignedIn]);
+
+  const clerkAppearance = {
+    baseTheme: window?.matchMedia('(prefers-color-scheme: dark)').matches ? ('dark' as any) : ('light' as any),
+    layout: {
+      logoPlacement: "none",  // Removes the Clerk logo
+      socialButtonsVariant: "blockButton",
+    },
+    
+  };
 
   return (
     <nav className="bg-black/30 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800">
@@ -31,7 +79,7 @@ const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
           
           <div className="flex items-center">
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton afterSignOutUrl="/" appearance={(clerkAppearance as any)} />
             ) : (
               <div className="flex items-center gap-2">
                 <button 

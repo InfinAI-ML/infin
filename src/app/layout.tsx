@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CInfinAI",
+  title: "InfinAI",
   description: "InfinAI a AI/ML platform",
 };
 
