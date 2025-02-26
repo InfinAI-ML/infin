@@ -1,9 +1,10 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth, useUser } from '@clerk/nextjs';
 
 // Import components
 import { DataFlowAnimation } from '@/components/DataflowAnimation';
@@ -12,12 +13,25 @@ import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
 import TestimonialCard from '../components/TestimonialCard';
 import EventCard from '../components/EventCard';
+import AuthModal from '@/components/AuthModal';
 import { projectsData, featuredEventData, offeringsData } from '@/data/data';
 import HeroSection from '@/components/Herosection';
 
 export default function Home() {
-  // Project data
- 
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [initialAuthView, setInitialAuthView] = useState<'sign-in' | 'sign-up'>('sign-in');
+  const { isSignedIn: authStatus, userId } = useAuth();
+  const isSignedIn = authStatus ?? false;
+  const { user } = useUser();
+  const openSignIn = () => {
+    setInitialAuthView('sign-in');
+    setIsAuthModalOpen(true);
+  };
+  
+  const openSignUp = () => {
+    setInitialAuthView('sign-up');
+    setIsAuthModalOpen(true);
+  };
   
   return (
     <div className="min-h-screen b text-white">
@@ -26,11 +40,22 @@ export default function Home() {
         <meta name="description" content="Official AI/ML club of IIT Madras BS Degree Program" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)}
+        initialView={initialAuthView}
+      />
+      
       <div className='absolute inset-0 z-2'>
-      <DataFlowAnimation/>
+        <DataFlowAnimation/>
       </div>
 
-      <Navbar />
+      <Navbar 
+        isSignedIn={isSignedIn}
+        openSignIn={openSignIn}
+        openSignUp={openSignUp}
+      />
       
       {/* Hero Section */}
       <HeroSection/>
@@ -185,18 +210,35 @@ export default function Home() {
         </div>
       </section> */}
 
-      {/* Call-to-Action */}
+      {/* Call-to-Action - Modified to include auth buttons */}
       <section className="py-16 bg-transparent z-10 backdrop-blur-sm bg-opacity-90">
         <div className="container mx-auto px-6 text-center max-w-3xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Dive into AI/ML?</h2>
           <p className="text-xl text-gray-300 mb-8">No prerequisites—just curiosity! Let's shape the future of AI together.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg">
-              Become a Member
-            </button>
-            <button className="bg-transparent border-2 border-blue-600 text-blue-400 hover:bg-blue-900 hover:bg-opacity-30 font-bold py-3 px-8 rounded-full transition duration-300 text-lg">
-              View Upcoming Events
-            </button>
+            {isSignedIn ? (
+              <div className="flex flex-col items-center">
+                <p className="text-green-400 mb-2">Welcome, {user?.firstName || 'Member'}!</p>
+                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg">
+                  Access Member Area
+                </button>
+              </div>
+            ) : (
+              <>
+                <button 
+                  onClick={openSignUp} 
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg"
+                >
+                  Become a Member
+                </button>
+                <button 
+                  onClick={openSignIn}
+                  className="bg-transparent border-2 border-blue-600 text-blue-400 hover:bg-blue-900 hover:bg-opacity-30 font-bold py-3 px-8 rounded-full transition duration-300 text-lg"
+                >
+                  Sign In
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
