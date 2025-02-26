@@ -219,7 +219,7 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0"
+      className="fixed inset-0 bg-gradient-to-b from-black to-blue-900"
       style={{
         background: 'transparent',
         zIndex: 0, // Make sure this is set correctly
