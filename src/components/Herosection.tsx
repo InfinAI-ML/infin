@@ -58,10 +58,10 @@ const HeroSection: React.FC = () => {
         ></div>
       </div>
       
-      {/* Enhanced particle system */}
+      {/* Enhanced particle system
       <div className="absolute inset-0 overflow-hidden z-0">
         <div className="particle-system">
-          {Array.from({ length: 80 }).map((_, i) => {
+          {Array.from({ length: 30 }).map((_, i) => {
             const pathType = i % 3; // Create 3 different path types
             const pathSize = 30 + Math.random() * 70;
             const speed = 5 + Math.random() * 10;
@@ -83,7 +83,7 @@ const HeroSection: React.FC = () => {
             );
           })}
         </div>
-      </div>
+      </div> */}
       
       {/* Data stream effects */}
       <div className="absolute inset-0 overflow-hidden z-0">
@@ -292,101 +292,7 @@ const HeroSection: React.FC = () => {
           transition: transform 0.2s ease-out;
         }
         
-        /* Enhanced particle system */
-        .particle-system {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
         
-        .particle {
-          position: absolute;
-          width: 2px;
-          height: 2px;
-          background: #38BDF8;
-          border-radius: 50%;
-          box-shadow: 0 0 4px #38BDF8;
-          opacity: 0.3;
-          will-change: transform;
-        }
-        
-        /* Different path animations for particle movement */
-        .path-type-0 {
-          animation: particle-path-sine linear infinite;
-        }
-        
-        .path-type-1 {
-          animation: particle-path-curve linear infinite;
-        }
-        
-        .path-type-2 {
-          animation: particle-path-zigzag linear infinite;
-        }
-        
-        @keyframes particle-path-sine {
-          0% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.7;
-          }
-          90% {
-            opacity: 0.3;
-          }
-          100% {
-            transform: translateY(-100vh) translateX(calc(sin(var(--path-size)) * 40px));
-            opacity: 0;
-          }
-        }
-        
-        @keyframes particle-path-curve {
-          0% {
-            transform: translateY(0) translateX(0) scale(1);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.8;
-            transform: translateY(-10vh) translateX(20px) scale(1);
-          }
-          50% {
-            transform: translateY(-50vh) translateX(-40px) scale(0.8);
-          }
-          90% {
-            opacity: 0.3;
-          }
-          100% {
-            transform: translateY(-100vh) translateX(10px) scale(0.5);
-            opacity: 0;
-          }
-        }
-        
-        @keyframes particle-path-zigzag {
-          0% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
-          }
-          20% {
-            transform: translateY(-20vh) translateX(20px);
-            opacity: 0.7;
-          }
-          40% {
-            transform: translateY(-40vh) translateX(-20px);
-          }
-          60% {
-            transform: translateY(-60vh) translateX(20px);
-          }
-          80% {
-            transform: translateY(-80vh) translateX(-20px);
-            opacity: 0.3;
-          }
-          100% {
-            transform: translateY(-100vh) translateX(0);
-            opacity: 0;
-          }
-        }
-
         /* Data streams */
         .data-streams {
           position: absolute;
