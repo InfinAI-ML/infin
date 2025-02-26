@@ -1,3 +1,5 @@
+"use client"
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -9,6 +11,8 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
+import LoadingWrapper from '../components/LoadingWrapper';
+// import '../styles/globals.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,10 +24,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "InfinAI",
-  description: "InfinAI a AI/ML platform",
-};
+// export const metadata: Metadata = {
+//   title: "InfinAI",
+//   description: "InfinAI a AI/ML platform",
+// };
 
 export default function RootLayout({
   children,
@@ -36,7 +40,9 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          {children}
+          <LoadingWrapper>
+            {children}
+          </LoadingWrapper>
         </body>
       </html>
     </ClerkProvider>

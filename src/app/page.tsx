@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useAuth, useUser } from '@clerk/nextjs';
 
 // Import components
-import { DataFlowAnimation } from '@/components/DataflowAnimation';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
@@ -34,7 +33,7 @@ export default function Home() {
   };
   
   return (
-    <div className="min-h-screen b text-white">
+    <div className="min-h-screen text-white">
       <Head>
         <title>InfinAI - IITM BS AI/ML Club</title>
         <meta name="description" content="Official AI/ML club of IIT Madras BS Degree Program" />
@@ -47,10 +46,8 @@ export default function Home() {
         initialView={initialAuthView}
       />
       
-      <div className='absolute inset-0 z-2'>
-        <DataFlowAnimation/>
-      </div>
-
+      {/* DataFlow animation is now handled by LoadingWrapper */}
+      
       <Navbar 
         isSignedIn={isSignedIn}
         openSignIn={openSignIn}
@@ -59,7 +56,8 @@ export default function Home() {
       
       {/* Hero Section */}
       <HeroSection/>
-
+      
+      {/* Featured Event Banner */}
       {/* Featured Event Banner */}
       <div className=" py-6 backdrop-blur-sm bg-opacity-90">
         <div className="container mx-auto px-6">
