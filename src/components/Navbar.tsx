@@ -11,6 +11,12 @@ interface NavbarProps {
 
 const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
+
+  // Check for dark mode preference on client side only
+  useEffect(() => {
+    setIsDarkMode(window?.matchMedia('(prefers-color-scheme: dark)').matches);
+  }, []);
 
   useEffect(() => {
     if (isSignedIn) {
@@ -18,14 +24,16 @@ const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
       style.innerHTML = `
         /* Hide Clerk branding */
         .cl-userButtonPopoverFooter,
+        .cl-internal-1hp5nqm,
         div[id^="cl-internal"] > div:has(> a[href*="clerk.com"]) {
           display: none !important;
         }
-        
+        .cl-internal-1baqzr {
+        background-color: #1F2937 !important;
+        }
         /* Improve dark theme styling for popup */
         .cl-userButtonPopover, .cl-userButtonPopoverCard {
           background-color: #1F2937 !important;
-          color: #F9FAFB !important;
           border-color: #374151 !important;
         }
         
@@ -35,7 +43,8 @@ const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
         .cl-userPreviewTextContainer p,
         .cl-userPreviewMainIdentifier,
         .cl-userPreviewSecondaryIdentifier {
-          color: #F9FAFB !important;
+          color:rgb(231, 217, 217) !important;
+          background-color: #1F2937 !important;
         }
         
         /* Style hover states for buttons */
@@ -52,12 +61,11 @@ const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
   }, [isSignedIn]);
 
   const clerkAppearance = {
-    baseTheme: window?.matchMedia('(prefers-color-scheme: dark)').matches ? ('dark' as any) : ('light' as any),
+    baseTheme: isDarkMode ? 'dark' : 'light',
     layout: {
       logoPlacement: "none",  // Removes the Clerk logo
       socialButtonsVariant: "blockButton",
     },
-    
   };
 
   return (

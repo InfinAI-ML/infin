@@ -20,9 +20,15 @@ const HeroSection: React.FC = () => {
         <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
             A student-driven community at IIT Madras BS, exploring the frontiers of AI/ML and its real-world applications.
           </p>
-        <button className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg shadow-lg">
-          Join Our Community →
-        </button>
+        <a 
+          href="https://discord.gg/zpbTxz49"
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
+          <button className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg shadow-lg">
+            Join Our Community →
+          </button>
+        </a>
       </div>
     </div>
   );
