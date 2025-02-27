@@ -157,19 +157,13 @@ const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
                   <UserButton afterSignOutUrl="/" appearance={(clerkAppearance as any)} />
                 </li>
               ) : (
-                <div className="flex items-center gap-4 mt-[14px]">
+                <div className="flex items-center gap-4 mt-[-3px]">
                   <button 
                     ref={glitch.ref}
                     onClick={openSignIn}
                     className="text-white text-md hover:font-bold hover:text-white flex items-center gap-1"
                   >
                     Sign In
-                  </button>
-                  <button 
-                    onClick={openSignUp}
-                    className="bg-green-950 hover:bg-green-900 text-white px-4 py-1 rounded-md transition shadow-md shadow-green-700"
-                  >
-                    Join Us
                   </button>
                 </div>
               )}
