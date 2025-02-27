@@ -1,0 +1,70 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .infinity {
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: rotate 12s linear infinite;
+            transform-origin: center;
+        }
+    </style>
+    
+    <!-- Glowing core effect -->
+    <g filter="url(#glow)">
+        <!-- Infinity symbol with tech pattern -->
+        <path class="infinity" 
+              d="M112 256C112 166.2 166.2 112 256 112C345.8 112 400 166.2 400 256C400 345.8 345.8 400 256 400C166.2 400 112 345.8 112 256Z" 
+              stroke="url(#grad1)" 
+              stroke-width="24"
+              stroke-dasharray="4 8"/>
+        
+        <!-- AI circuit lines -->
+        <path d="M256 176L300 256L256 336L212 256L256 176Z" 
+              stroke="url(#grad2)" 
+              stroke-width="16"
+              fill="none"/>
+        
+        <!-- Binary code particles -->
+        <g fill="#00f3ff" opacity="0.8">
+            <text x="180" y="140" transform="rotate(30 180 140)" font-size="14">1010</text>
+            <text x="340" y="380" transform="rotate(-15 340 380)" font-size="14">0101</text>
+            <text x="90" y="300" font-size="14">1110</text>
+            <text x="400" y="200" font-size="14">0010</text>
+        </g>
+    </g>
+
+    <!-- Text logo -->
+    <text x="256" y="460" text-anchor="middle" font-family="Arial" font-size="40" font-weight="bold" fill="url(#grad3)">
+        Infin AI
+    </text>
+
+    <!-- Gradients -->
+    <defs>
+        <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#00f3ff"/>
+            <stop offset="100%" stop-color="#7848ff"/>
+        </linearGradient>
+        
+        <linearGradient id="grad2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7848ff"/>
+            <stop offset="100%" stop-color="#00f3ff"/>
+        </linearGradient>
+        
+        <linearGradient id="grad3" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#00f3ff"/>
+            <stop offset="100%" stop-color="#7848ff"/>
+        </linearGradient>
+
+        <!-- Glow filter -->
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+</svg>

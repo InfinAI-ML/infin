@@ -15,6 +15,7 @@ import EventCard from '../components/EventCard';
 import AuthModal from '@/components/AuthModal';
 import { projectsData, featuredEventData, offeringsData } from '@/data/data';
 import HeroSection from '@/components/Herosection';
+import LoadingWrapper from '@/components/LoadingWrapper';
 
 export default function Home() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -34,6 +35,7 @@ export default function Home() {
   
   return (
     <div className="min-h-screen text-white">
+      < LoadingWrapper >
       <Head>
         <title>InfinAI - IITM BS AI/ML Club</title>
         <meta name="description" content="Official AI/ML club of IIT Madras BS Degree Program" />
@@ -44,7 +46,7 @@ export default function Home() {
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)}
         initialView={initialAuthView}
-      />
+        />
       
       {/* DataFlow animation is now handled by LoadingWrapper */}
       
@@ -52,7 +54,7 @@ export default function Home() {
         isSignedIn={isSignedIn}
         openSignIn={openSignIn}
         openSignUp={openSignUp}
-      />
+        />
       
       {/* Hero Section */}
       <HeroSection/>
@@ -69,7 +71,7 @@ export default function Home() {
         description={featuredEventData.description}
         image="/images/image.png"
         registrationLink={featuredEventData.buttonLink}
-          />
+        />
         </div>
       </div>
 
@@ -97,7 +99,7 @@ export default function Home() {
                   index % 4 === 1 ? 'bg-purple-900/50 text-purple-300 border border-purple-500' :
                   index % 4 === 2 ? 'bg-green-900/50 text-green-300 border border-green-500' :
                   'bg-red-900/50 text-red-300 border border-red-500'
-                }`}>
+                  }`}>
                   {value}
                 </span>
               ))}
@@ -139,14 +141,14 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projectsData.map((project, index) => (
               <ProjectCard
-                key={index}
-                title={project.title}
-                description={project.description}
-                image={project.image}
-                tags={project.tags}
-                badgeText={project.badge?.text}
-                badgeColor={project.badge?.color}
-                // learnMoreLink={project.learnMoreLink}
+              key={index}
+              title={project.title}
+              description={project.description}
+              image={project.image}
+              tags={project.tags}
+              badgeText={project.badge?.text}
+              badgeColor={project.badge?.color}
+              // learnMoreLink={project.learnMoreLink}
               />
             ))}
           </div>
@@ -177,7 +179,7 @@ export default function Home() {
                 <button 
                   onClick={openSignIn}
                   className="bg-transparent border-2 border-blue-600 text-blue-400 hover:bg-blue-900 hover:bg-opacity-30 font-bold py-3 px-8 rounded-full transition duration-300 text-lg"
-                >
+                  >
                   Sign In
                 </button>
               </>
@@ -213,6 +215,7 @@ export default function Home() {
       <div className=" py-12">
       <Footer />
       </div>
+      </LoadingWrapper>
     </div>
   );
 }

@@ -13,7 +13,7 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({
   children, 
   showLoadingScreen: externalShowLoadingScreen, 
   duration = 3000,
-  alwaysShowAnimation = false
+  alwaysShowAnimation = true
 }) => {
   // Use local state for loading screen if not controlled externally
   const [internalShowLoadingScreen, setInternalShowLoadingScreen] = useState(true);
