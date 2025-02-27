@@ -58,32 +58,6 @@ const HeroSection: React.FC = () => {
         ></div>
       </div>
       
-      {/* Enhanced particle system
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <div className="particle-system">
-          {Array.from({ length: 30 }).map((_, i) => {
-            const pathType = i % 3; // Create 3 different path types
-            const pathSize = 30 + Math.random() * 70;
-            const speed = 5 + Math.random() * 10;
-            return (
-              <div 
-                key={i} 
-                className={`particle path-type-${pathType}`} 
-                style={{
-                  top: `${Math.random() * 100}%`,
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 8}s`,
-                  animationDuration: `${speed}s`,
-                  opacity: 0.2 + Math.random() * 0.4,
-                  width: (i % 5 === 0) ? '3px' : '2px',
-                  height: (i % 5 === 0) ? '3px' : '2px',
-                  '--path-size': `${pathSize}px`,
-                } as React.CSSProperties}
-              ></div>
-            );
-          })}
-        </div>
-      </div> */}
       
       {/* Data stream effects */}
       <div className="absolute inset-0 overflow-hidden z-0">
@@ -248,7 +222,7 @@ const HeroSection: React.FC = () => {
           and its real-world applications.
         </p>
         
-        {/* Cyberpunk style button */}
+        {/* AI/ML style button */}
         <button 
           ref={buttonRef}
           className="cyberpunk-button opacity-0 translate-y-4 relative py-4 px-10 text-lg font-bold text-white overflow-hidden transition-all duration-500 group"
@@ -261,13 +235,22 @@ const HeroSection: React.FC = () => {
             </svg>
           </span>
           <span className="cyber-glow absolute inset-0 z-0"></span>
-          <span className="cyber-glitch absolute inset-0 z-0 opacity-0 group-hover:opacity-100"></span>
+          <span className="cyber-glitch absolute inset-0 z-0"></span>
           <span className="cyber-corners"></span>
+          
+          {/* Neural network nodes */}
+          <span className="absolute w-1.5 h-1.5 rounded-full bg-blue-400/60 top-2 left-4"></span>
+          <span className="absolute w-1.5 h-1.5 rounded-full bg-cyan-400/60 bottom-3 right-6"></span>
+          <span className="absolute w-1 h-1 rounded-full bg-blue-300/60 top-1/2 right-4"></span>
+          <span className="absolute w-1 h-1 rounded-full bg-cyan-300/60 bottom-2 left-7"></span>
         </button>
         
         {/* Binary data stream at the bottom */}
         <div className="absolute left-0 right-0 bottom-12 flex justify-center opacity-40 overflow-hidden h-8">
-          <div className="binary-stream">01001001 01101110 01100110 01101001 01101110 01000001 01001001 00100000</div>
+            <div className="binary-stream">
+            {/* Binary for "WINTER IS COMING" */}
+            01010111 01001001 01001110 01010100 01000101 01010010 00100000 01001001 01010011 00100000 01000011 01001111 01001101 01001001 01001110 01000111
+            </div>
         </div>
       </div>
       
@@ -474,58 +457,111 @@ const HeroSection: React.FC = () => {
           transform: translateY(0) !important;
         }
         
-        /* Cyberpunk button style */
+        /* Neural Network Button Style */
         .cyberpunk-button {
-          background: linear-gradient(45deg, #000 0%, #081d2c 100%);
-          border: 1px solid #38BDF8;
-          box-shadow: 0 0 10px rgba(56, 189, 248, 0.4),
+          background: linear-gradient(135deg, #082f49 0%, #0c4a6e 100%);
+          border: none;
+          position: relative;
+          color: #38BDF8;
+          border-radius: 6px;
+          box-shadow: 0 0 15px rgba(56, 189, 248, 0.3),
                       inset 0 0 5px rgba(56, 189, 248, 0.2);
-          clip-path: polygon(
-            0% 15%, 15% 0%, 85% 0%, 100% 15%, 
-            100% 85%, 85% 100%, 15% 100%, 0% 85%
-          );
-          transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: all 0.3s ease-out;
+          overflow: visible;
+        }
+        
+        .cyberpunk-button::before {
+          content: '';
+          position: absolute;
+          inset: 1px;
+          background: linear-gradient(135deg, #082f49 0%, #0c4a6e 100%);
+          border-radius: 5px;
+          z-index: 0;
         }
         
         .cyberpunk-button:hover {
-          transform: translateY(0) scale(1.05);
-          box-shadow: 0 0 20px rgba(56, 189, 248, 0.6),
-                      0 0 40px rgba(56, 189, 248, 0.3),
+          transform: translateY(-2px);
+          box-shadow: 0 0 20px rgba(56, 189, 248, 0.5),
+                      0 0 30px rgba(56, 189, 248, 0.2),
                       inset 0 0 5px rgba(56, 189, 248, 0.3);
+          color: #7eedff;
         }
         
         .cyberpunk-button:active {
-          transform: translateY(2px) scale(1);
+          transform: translateY(1px);
           box-shadow: 0 0 10px rgba(56, 189, 248, 0.4),
-                      inset 0 0 5px rgba(56, 189, 248, 0.2);
+                      inset 0 0 5px rgba(56, 189, 248, 0.4);
         }
         
         .cyber-glow {
-          background: linear-gradient(45deg, 
-            rgba(56, 189, 248, 0.1) 0%, 
-            rgba(14, 165, 233, 0.1) 30%, 
-            rgba(56, 189, 248, 0.1) 70%, 
-            rgba(12, 74, 110, 0.1) 100%);
+          background: radial-gradient(
+            circle at center,
+            rgba(56, 189, 248, 0.15) 0%,
+            rgba(56, 189, 248, 0.05) 70%,
+            rgba(12, 74, 110, 0) 100%
+          );
           filter: blur(5px);
-          transition: opacity 0.3s;
+          transition: all 0.3s;
         }
         
         .cyber-glitch {
           background-image: 
-            linear-gradient(90deg, rgba(56, 189, 248, 0.15) 1px, transparent 1px),
-            linear-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px);
-          background-size: 6px 6px;
+            radial-gradient(circle at 30% 20%, rgba(56, 189, 248, 0.1) 3px, transparent 4px),
+            radial-gradient(circle at 70% 60%, rgba(56, 189, 248, 0.1) 2px, transparent 3px),
+            radial-gradient(circle at 40% 80%, rgba(56, 189, 248, 0.1) 4px, transparent 5px),
+            radial-gradient(circle at 80% 30%, rgba(56, 189, 248, 0.1) 3px, transparent 4px);
           transition: opacity 0.3s;
-          animation: glitch 0.2s ease-in-out infinite alternate;
+        }
+        
+        .cyber-corners {
+          position: absolute;
+          inset: -1px;
+          z-index: -1;
+          pointer-events: none;
+          overflow: hidden;
+        }
+        
+        .cyber-corners::before,
+        .cyber-corners::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          transition: opacity 0.3s ease-out;
+        }
+        
+        .cyber-corners::before {
+          background: linear-gradient(90deg, transparent 0%, transparent 40%, #38BDF8 50%, transparent 60%, transparent 100%);
+          animation: neuralScan 3s ease-in-out infinite;
+        }
+        
+        .cyber-corners::after {
+          background: linear-gradient(180deg, transparent 0%, transparent 40%, #38BDF8 50%, transparent 60%, transparent 100%);
+          animation: dataScan 3s ease-in-out 1.5s infinite;
+        }
+        
+        .cyberpunk-button:hover .cyber-corners::before,
+        .cyberpunk-button:hover .cyber-corners::after {
+          opacity: 0.15;
+        }
+        
+        @keyframes neuralScan {
+          0%, 100% { transform: translateX(-100%); }
+          50% { transform: translateX(100%); }
+        }
+        
+        @keyframes dataScan {
+          0%, 100% { transform: translateY(-100%); }
+          50% { transform: translateY(100%); }
         }
         
         @keyframes glitch {
           0% { background-position: 0 0; }
-          20% { background-position: -1px 1px; }
-          40% { background-position: 1px 2px; }
-          60% { background-position: 2px -2px; }
-          80% { background-position: -2px -1px; }
-          100% { background-position: 1px 1px; }
+          25% { background-position: 10px -5px; }
+          50% { background-position: -10px 5px; }
+          75% { background-position: 5px 10px; }
+          100% { background-position: -5px -10px; }
         }
         
         /* Binary data stream */

@@ -59,7 +59,7 @@ export default function Home() {
       
       {/* Featured Event Banner */}
       {/* Featured Event Banner */}
-      <div className=" py-6 backdrop-blur-sm bg-opacity-90">
+      <div className=" py-6 backdrop-blur-sm bg-opacity-90" id='events'>
         <div className="container mx-auto px-6">
           <EventCard
         title={featuredEventData.title}
@@ -67,14 +67,14 @@ export default function Home() {
         time="5:00 PM IST"
         location="Virtual (Zoom)"
         description={featuredEventData.description}
-        image="/images/image_copy.png"
+        image="/images/image.png"
         registrationLink={featuredEventData.buttonLink}
           />
         </div>
       </div>
 
       {/* Introduction Section */}
-      <section className="py-16 bg-transparent z-5 backdrop-blur-sm bg-opacity-90">
+      <section className="py-16 bg-transparent z-5 backdrop-blur-sm bg-opacity-90" id='about'>
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 inline-block border-b-4 border-blue-500 pb-2">About InfinAI</h2>
           <div className="space-y-6">
@@ -107,7 +107,7 @@ export default function Home() {
       </section>
 
       {/* Key Sections */}
-      <section className="py-16 bg-transparent z-5 backdrop-blur-sm bg-opacity-90">
+      <section className="py-16 bg-transparent z-5 backdrop-blur-sm bg-opacity-90" id='offerings'>
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold mb-12 text-center">What We Offer</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -133,7 +133,7 @@ export default function Home() {
       </section>
 
       {/* Featured Projects */}
-      <section className="py-16 bg-black z-10 bg-transparent backdrop-blur-sm bg-opacity-90">
+      <section className="py-16 bg-black z-10 bg-transparent backdrop-blur-sm bg-opacity-90" id='projects'>
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold mb-12 text-center">Featured Projects</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -1,8 +1,44 @@
 // File: components/Footer.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 const Footer: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) return;
+    
+    setLoading(true);
+    setMessage('');
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage('Thank you for subscribing!');
+        setEmail('');
+      } else {
+        setMessage(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      setMessage('An error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <footer className="bottom-0 bg-transparent z-5 backdrop-blur-sm bg-opacity-90 text-white pt-12 pb-6">
       <div className="container mx-auto px-6">
@@ -57,18 +93,29 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Subscribe</h3>
             <p className="text-gray-400 mb-4">Get monthly AI insights, event updates, and resources.</p>
-            <form className="flex flex-col sm:flex-row gap-2">
-              <input 
-                type="email" 
-                placeholder="Your email" 
-                className="bg-gray-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button 
-                type="submit" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300"
-              >
-                Subscribe
-              </button>
+            <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input 
+                  type="email" 
+                  placeholder="Your email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-gray-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <button 
+                  type="submit" 
+                  className={`${loading ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-2 rounded-lg transition duration-300`}
+                  disabled={loading}
+                >
+                  {loading ? 'Subscribing...' : 'Subscribe'}
+                </button>
+              </div>
+              {message && (
+                <p className={`text-sm ${message.includes('error') || message.includes('wrong') ? 'text-red-400' : 'text-green-400'}`}>
+                  {message}
+                </p>
+              )}
             </form>
           </div>
         </div>

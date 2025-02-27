@@ -79,9 +79,9 @@ const Navbar = ({ isSignedIn, openSignIn, openSignUp }: NavbarProps) => {
           </Link>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="#" className="text-gray-300 hover:text-white transition">About</Link>
-            <Link href="#" className="text-gray-300 hover:text-white transition">Projects</Link>
-            <Link href="#" className="text-gray-300 hover:text-white transition">Events</Link>
+            <Link href="/#about" className="text-gray-300 hover:text-white transition">About</Link>
+            <Link href="/#projects" className="text-gray-300 hover:text-white transition">Projects</Link>
+            <Link href="/#events" className="text-gray-300 hover:text-white transition">Events</Link>
             <Link href="#" className="text-gray-300 hover:text-white transition">Resources</Link>
           </div>
           

@@ -45,14 +45,14 @@ const EventCard: React.FC<EventCardProps> = ({
             </p>
             {registrationLink && (
               <div className="flex flex-wrap gap-4">
-                <a
+                {/* <a
                   href={registrationLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-900 hover:bg-gray-900 font-bold py-2 px-6 rounded-lg"
                 >
                   Register Now
-                </a>
+                </a> */}
               </div>
             )}
           </div>
