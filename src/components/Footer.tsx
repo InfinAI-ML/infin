@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bottom-0 bg-transparent z-5 backdrop-blur-sm bg-opacity-90 text-white pt-12 pb-6">
+    <footer className=" backdrop-blur-lg bg-black bg-opacity-30 z-5 text-white pt-12 pb-6">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>

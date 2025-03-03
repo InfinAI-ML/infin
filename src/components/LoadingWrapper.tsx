@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DataLoadingAnimation from './DataLoadingAnimation';
 import { DataFlowAnimation } from './DataflowAnimation';
+import { flushAllTraces } from 'next/dist/trace';
 
 interface LoadingWrapperProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({
   children, 
   showLoadingScreen: externalShowLoadingScreen, 
   duration = 3000,
-  alwaysShowAnimation = true
+  alwaysShowAnimation = false
 }) => {
   // Use local state for loading screen if not controlled externally
   const [internalShowLoadingScreen, setInternalShowLoadingScreen] = useState(true);

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 
 interface DataLoadingAnimationProps {
   onComplete?: () => void;
-  duration?: number;
+  duration?: number; // Duration in ms
 }
 
 const DataLoadingAnimation: React.FC<DataLoadingAnimationProps> = ({ 
@@ -10,365 +10,350 @@ const DataLoadingAnimation: React.FC<DataLoadingAnimationProps> = ({
   duration = 3000 
 }) => {
   const [progress, setProgress] = useState(0);
+  const [particlesGenerated, setParticlesGenerated] = useState(false);
   const animationRef = useRef<SVGSVGElement>(null);
   const particlesRef = useRef<SVGGElement>(null);
-  const progressRingRef = useRef<SVGCircleElement>(null);
-
+  const letterRefs = useRef<(SVGPathElement | null)[]>([]);
+  
+  // Generate particles for the background effect
+  useEffect(() => {
+    if (particlesRef.current && !particlesGenerated) {
+      const particlesGroup = particlesRef.current;
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const size = 1 + Math.random() * 3;
+        const x = Math.random() * 400;
+        const y = Math.random() * 400;
+        const opacity = 0.2 + Math.random() * 0.5;
+        const hue = 220 + Math.random() * 60; // Blue range
+        
+        particle.setAttribute("cx", x.toString());
+        particle.setAttribute("cy", y.toString());
+        particle.setAttribute("r", size.toString());
+        particle.setAttribute("fill", `hsla(${hue}, 100%, 70%, ${opacity})`);
+        
+        // Add animation with CSS
+        particle.style.animation = `float ${5 + Math.random() * 10}s linear infinite`;
+        particle.style.transform = `translate(0, 0)`;
+        particle.style.transformOrigin = `${x}px ${y}px`;
+        
+        particlesGroup.appendChild(particle);
+      }
+      
+      setParticlesGenerated(true);
+    }
+  }, [particlesGenerated]);
+  
+  // Main animation effect
   useEffect(() => {
     const startTime = Date.now();
     const endTime = startTime + duration;
-
-    const animate = () => {
+    
+    // Add global animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(${Math.random() * 10}px, ${Math.random() * -10}px) rotate(120deg); }
+        66% { transform: translate(${Math.random() * -10}px, ${Math.random() * 10}px) rotate(240deg); }
+        100% { transform: translate(0, 0) rotate(360deg); }
+      }
+      
+      @keyframes pulse {
+        0% { opacity: 0.7; }
+        50% { opacity: 1; }
+        100% { opacity: 0.7; }
+      }
+      
+      @keyframes dash {
+        to { stroke-dashoffset: 0; }
+      }
+      
+      @keyframes dataFlow {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: -300; }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize letter animations
+    if (letterRefs.current.length > 0) {
+      letterRefs.current.forEach((letter, i) => {
+        if (letter) {
+          const length = letter.getTotalLength();
+          letter.style.strokeDasharray = length.toString();
+          letter.style.strokeDashoffset = length.toString();
+        }
+      });
+    }
+    
+    // Animate progress and elements
+    const animateProgress = () => {
       const now = Date.now();
       const elapsed = now - startTime;
       const newProgress = Math.min(elapsed / duration, 1);
       setProgress(newProgress);
-
-      // Update circular progress
-      if (progressRingRef.current) {
-        const circumference = 2 * Math.PI * 180;
-        progressRingRef.current.style.strokeDashoffset = 
-          (circumference * (1 - newProgress)).toString();
-      }
-
-      if (newProgress < 1) {
-        requestAnimationFrame(animate);
-      } else if (onComplete) {
-        setTimeout(onComplete, 500);
-      }
-    };
-
-    animate();
-  }, [duration, onComplete]);
-
-  // Generate floating binary particles
-  useEffect(() => {
-    const particles = particlesRef.current;
-    if (!particles) return;
-
-    // Function to create particle
-    const createParticle = () => {
-      const particle = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      const x = Math.random() * 512;
-      const y = Math.random() * 512;
-      const value = Math.random() > 0.85 ? (Math.random() > 0.5 ? '10' : '01') : (Math.random() > 0.5 ? '0' : '1');
-      const size = 8 + Math.random() * 10;
-      const opacity = 0.3 + Math.random() * 0.5;
-      const duration = 8 + Math.random() * 12;
       
-      particle.setAttribute("x", x.toString());
-      particle.setAttribute("y", y.toString());
-      particle.setAttribute("fill", Math.random() > 0.8 ? `rgba(120, 72, 255, ${opacity})` : `rgba(0, 243, 255, ${opacity})`);
-      particle.setAttribute("font-size", `${size}px`);
-      particle.setAttribute("font-family", "monospace");
-      particle.textContent = value;
-      
-      // Animate particle
-      particle.style.animation = `
-        float${Math.floor(Math.random() * 4) + 1} ${duration}s infinite ease-in-out,
-        blink ${2 + Math.random() * 3}s infinite ease-in-out
-      `;
-      
-      particles.appendChild(particle);
-      
-      // Remove particle after some time to prevent clutter
-      setTimeout(() => {
-        if (particle.parentNode === particles) {
-          const fadeOut = () => {
-            let opacity = parseFloat(particle.style.opacity || "1");
-            if (opacity > 0) {
-              opacity -= 0.05;
-              particle.style.opacity = opacity.toString();
-              requestAnimationFrame(fadeOut);
-            } else {
-              particles.removeChild(particle);
+      // Animate letters appearing sequentially
+      if (letterRefs.current.length > 0) {
+        // Start letter animations when progress reaches 0.1
+        if (newProgress > 0.1) {
+          const lettersProgress = (newProgress - 0.1) / 0.5; // Complete by 60% of total animation
+          const letterIndex = Math.min(
+            Math.floor(lettersProgress * letterRefs.current.length), 
+            letterRefs.current.length
+          );
+          
+          for (let i = 0; i < letterIndex; i++) {
+            if (letterRefs.current[i]) {
+              letterRefs.current[i]!.style.animation = `dash 0.8s ease forwards`;
+              letterRefs.current[i]!.style.animationDelay = `${i * 0.1}s`;
             }
-          };
-          fadeOut();
+          }
         }
-      }, (duration * 1000) - 2000);
+      }
+      
+      if (newProgress < 1) {
+        requestAnimationFrame(animateProgress);
+      } else if (onComplete) {
+        setTimeout(onComplete, 500); // Slight delay before transition
+      }
     };
-
-    // Create initial particles
-    for (let i = 0; i < 40; i++) createParticle();
     
-    // Add particles periodically
-    const interval = setInterval(() => {
-      if (particles.childNodes.length < 70) createParticle();
-    }, 800);
-
-    return () => clearInterval(interval);
-  }, []);
-
+    requestAnimationFrame(animateProgress);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, [duration, onComplete]);
+  
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-95">
-      <div className="relative">
-        <svg ref={animationRef} viewBox="0 0 512 512" className="w-64 h-64 md:w-80 md:h-80">
-          <defs>
-            <linearGradient id="mainGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#00f3ff" />
-              <stop offset="100%" stopColor="#7848ff" />
-            </linearGradient>
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-black to-blue-900">
+      {/* Increased size from w-80 h-80 to w-[500px] h-[500px] */}
+      <div className="w-[500px] h-[500px] relative">
+        <svg ref={animationRef} viewBox="0 0 400 400" className="w-full h-full">
+          {/* Background particles */}
+          <g ref={particlesRef} className="particles"></g>
+          
+          {/* Data flow paths - Always visible with continuous animation */}
+          <g className="data-flows" opacity={Math.min(progress * 2, 1)} style={{ transition: 'opacity 0.8s ease-in-out' }}>
+            {[0, 40, 80, 120, 160, 200, 240, 280, 320].map((angle, i) => {
+              const radian = angle * Math.PI / 180;
+              const startX = 200 + 150 * Math.cos(radian);
+              const startY = 200 + 150 * Math.sin(radian);
+              
+              return (
+                <path 
+                  key={i}
+                  d={`M${startX},${startY} Q200,200 ${200 - (startX - 200) * 0.7},${200 - (startY - 200) * 0.7}`}
+                  fill="none" 
+                  stroke={`hsla(${220 + i * 5}, 100%, 70%, 0.6)`}
+                  strokeWidth="1"
+                  strokeDasharray="4,4"
+                  style={{ 
+                    animation: `dataFlow ${8 + i * 0.5}s linear infinite`,
+                    transition: 'opacity 0.8s ease-in-out'
+                  }}
+                />
+              );
+            })}
+          </g>
+          
+          {/* Neural network central brain visualization */}
+          <g className="brain" opacity={Math.min(progress * 3, 1)} style={{ transition: 'opacity 0.8s ease-in-out' }}>
+            <circle cx="200" cy="200" r="70" fill="rgba(23, 37, 84, 0.7)" />
+            <circle cx="200" cy="200" r="50" fill="rgba(30, 58, 138, 0.8)" />
             
-            <linearGradient id="reverseGradient" x1="1" y1="1" x2="0" y2="0">
-              <stop offset="0%" stopColor="#00f3ff" />
-              <stop offset="100%" stopColor="#7848ff" />
-            </linearGradient>
-
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
+            {/* Pulsing core */}
+            <circle 
+              cx="200" 
+              cy="200" 
+              r="30" 
+              fill="rgba(59, 130, 246, 0.9)" 
+              style={{ animation: 'pulse 2s infinite' }}
+            />
             
-            <radialGradient id="centerGlow" cx="0.5" cy="0.5" r="0.5" fx="0.5" fy="0.5">
-              <stop offset="0%" stopColor="rgba(0, 243, 255, 0.3)" />
-              <stop offset="100%" stopColor="rgba(0, 243, 255, 0)" />
-            </radialGradient>
-          </defs>
-
-          {/* Glowing center */}
-          <circle 
-            cx="256" 
-            cy="256" 
-            r="120" 
-            fill="url(#centerGlow)" 
-            opacity={0.4 + progress * 0.4}
-            style={{
-              animation: 'pulse 3s infinite ease-in-out',
-              transformOrigin: 'center',
-              transform: 'scale(1)',
-            }}
-          />
-
-          {/* Floating binary particles */}
-          <g ref={particlesRef} className="particles" opacity={0.7} />
-
-          {/* Outer tech ring */}
-          <circle
-            cx="256"
-            cy="256"
-            r="210"
-            fill="none"
-            stroke="rgba(0, 243, 255, 0.15)"
-            strokeWidth="2"
-            strokeDasharray="3 6"
-            style={{
-              animation: 'rotate-reverse 30s linear infinite',
-              transformOrigin: 'center',
-            }}
-          />
-
-          {/* Main infinity symbol */}
-          <path
-            d="M256 112C166.2 112 112 166.2 112 256C112 345.8 166.2 400 256 400C345.8 400 400 345.8 400 256"
-            stroke="url(#mainGradient)"
-            strokeWidth="24"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray="4 8"
-            style={{
-              animation: 'rotate 12s linear infinite',
-              transformOrigin: 'center',
-              filter: 'url(#glow)'
-            }}
-          />
-
-          {/* Circuit diamond */}
-          <path
-            d="M256 176L300 256L256 336L212 256L256 176Z"
-            stroke="url(#mainGradient)"
-            strokeWidth="16"
-            fill="none"
-            strokeDasharray="200"
-            strokeDashoffset={200 * (1 - progress)}
-            style={{
-              transition: 'stroke-dashoffset 0.5s ease-out',
-              filter: 'url(#glow)'
-            }}
-          />
+            {/* Orbit circles */}
+            <g className="orbits">
+              <circle 
+                cx="200" 
+                cy="200" 
+                r="100" 
+                fill="none" 
+                stroke="rgba(147, 197, 253, 0.3)" 
+                strokeWidth="1" 
+                strokeDasharray="5,5"
+                style={{ 
+                  transformOrigin: '200px 200px',
+                  animation: 'float 30s linear infinite' 
+                }}
+              />
+              <circle 
+                cx="200" 
+                cy="200" 
+                r="130" 
+                fill="none" 
+                stroke="rgba(147, 197, 253, 0.2)" 
+                strokeWidth="1" 
+                strokeDasharray="3,3"
+                style={{ 
+                  transformOrigin: '200px 200px',
+                  animation: 'float 40s linear infinite reverse' 
+                }}
+              />
+            </g>
+            
+            {/* Data nodes on orbit */}
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+              const radian = angle * Math.PI / 180;
+              const radius = 100;
+              const x = 200 + radius * Math.cos(radian);
+              const y = 200 + radius * Math.sin(radian);
+              const delay = i * 0.1;
+              const opacity = progress > 0.3 + delay ? 1 : 0;
+              
+              return (
+                <g key={i} opacity={opacity} style={{ transition: 'opacity 0.8s ease-in-out' }}>
+                  <circle 
+                    cx={x} 
+                    cy={y} 
+                    r="4" 
+                    fill="rgba(255, 255, 255, 0.8)"
+                  />
+                  <line 
+                    x1={x} 
+                    y1={y} 
+                    x2="200" 
+                    y2="200"
+                    stroke="rgba(147, 197, 253, 0.5)"
+                    strokeWidth="1"
+                  />
+                </g>
+              );
+            })}
+          </g>
           
-          {/* Circuit connector lines */}
-          <line 
-            x1="256" y1="336" x2="256" y2="400" 
-            stroke={`rgba(0, 243, 255, ${progress > 0.5 ? progress : 0})`}
-            strokeWidth="4" 
-            strokeDasharray="6 4"
-          />
-          <line 
-            x1="256" y1="176" x2="256" y2="112" 
-            stroke={`rgba(120, 72, 255, ${progress > 0.5 ? progress : 0})`}
-            strokeWidth="4" 
-            strokeDasharray="6 4"
-          />
-
-          {/* Circular progress background */}
-          <circle
-            cx="256"
-            cy="256"
-            r="180"
-            fill="none"
-            stroke="rgba(120, 72, 255, 0.15)"
-            strokeWidth="24"
-          />
+          {/* InfinAI Logo Text */}
+          <g transform="translate(100, 200)" opacity={Math.min((progress - 0.1) * 3, 1)} style={{ transition: 'opacity 0.8s ease-in-out' }}>
+            {/* I */}
+            <path
+              ref={el => letterRefs.current[0] = el as any}
+              d="M0,0 V-40"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* n */}
+            <path
+              ref={el => letterRefs.current[1] = el as any}
+              d="M10,-40 V0 C10,-15 30,-15 30,0 V0"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* f */}
+            <path
+              ref={el => letterRefs.current[2] = el as any}
+              d="M40,-60 V0 M30,-30 H50"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* i */}
+            <path
+              ref={el => letterRefs.current[3] = el as any}
+              d="M60,-40 V0 M60,-50 V-52"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* n */}
+            <path
+              ref={el => letterRefs.current[4] = el as any}
+              d="M70,-40 V0 C70,-15 90,-15 90,0 V0"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* A */}
+            <path
+              ref={el => letterRefs.current[5] = el as any}
+              d="M105,-40 L120,-0 L135,-40 M110,-20 H130"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* I */}
+            <path
+              ref={el => letterRefs.current[6] = el as any}
+              d="M145,0 V-40"
+              stroke="#fff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Infinity Symbol */}
+            <path
+              ref={el => letterRefs.current[7] = el as any}
+              d="M180,-30 C160,-50 130,-10 150,10 C170,30 200,-10 180,-30 Z"
+              stroke="#5EEAD4"
+              strokeWidth="3"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </g>
           
-          {/* Circular progress */}
-          <circle
-            ref={progressRingRef}
-            cx="256"
-            cy="256"
-            r="180"
-            fill="none"
-            stroke="url(#mainGradient)"
-            strokeWidth="24"
-            strokeLinecap="round"
-            strokeDasharray={2 * Math.PI * 180}
-            style={{
-              transform: 'rotate(-90deg)',
-              transformOrigin: 'center',
-              transition: 'stroke-dashoffset 0.5s ease-out',
-              filter: 'url(#glow)'
-            }}
-          />
-
-          {/* Center text */}
-          <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="42"
-            fill="url(#mainGradient)"
-            className="font-bold"
-            style={{
-              filter: 'url(#glow)',
-              textShadow: '0 0 8px rgba(0, 0, 0, 0.8)'
-            }}
-          >
-            {Math.round(progress * 100)}%
-          </text>
-          
-          {/* Adding a background highlight for better contrast */}
-          <circle
-            cx="256"
-            cy="256"
-            r="60"
-            fill="rgba(0, 0, 0, 0.6)"
-            style={{
-              filter: 'blur(6px)',
-            }}
-          />
-          
-          {/* Center text with high contrast */}
-          <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="42"
-            stroke="#000000"
-            strokeWidth="3"
-            strokeOpacity="0.6"
-            className="font-bold"
-          >
-            {Math.round(progress * 100)}%
-          </text>
-          <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="42"
-            fill="white"
-            className="font-bold"
-            style={{
-              filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))'
-            }}
-          >
-            {Math.round(progress * 100)}%
-          </text>
-          
-          {/* Data processing text */}
-          <text
-            x="256"
-            y="290"
-            textAnchor="middle"
-            fontSize="14"
-            fill="white"
-            opacity="0.7"
-            className="font-mono"
-          >
-            PROCESSING DATA
-          </text>
-
-          {/* Bottom text logo */}
-          <text
-            x="256"
-            y="460"
-            textAnchor="middle"
-            fontSize="32"
-            fill="url(#mainGradient)"
-            className="font-bold"
-            style={{filter: 'url(#glow)'}}
-          >
-            Infin AI
-          </text>
+          {/* Progress bar */}
+          <g transform="translate(0, 50)" opacity={Math.min(progress * 3, 1)} style={{ transition: 'opacity 0.8s ease-in-out' }}>
+            <rect 
+              x="100" 
+              y="250" 
+              width="200" 
+              height="4" 
+              rx="2" 
+              fill="rgba(30, 58, 138, 0.5)" 
+            />
+            <rect 
+              x="100" 
+              y="250" 
+              width={progress * 200} 
+              height="4" 
+              rx="2" 
+              fill="rgba(147, 197, 253, 0.9)" 
+              className="transition-all duration-500"
+            />
+            
+            {/* Text */}
+            <text 
+              x="200" 
+              y="280" 
+              fontSize="12" 
+              fill="white" 
+              textAnchor="middle"
+              className="font-medium"
+            >
+              {progress < 1 ? 'INITIALIZING...' : 'READY'}
+            </text>
+            <text 
+              x="200" 
+              y="300" 
+              fontSize="10" 
+              fill="rgba(255, 255, 255, 0.7)" 
+              textAnchor="middle"
+            >
+              {Math.round(progress * 100)}%
+            </text>
+          </g>
         </svg>
       </div>
-
-      <style jsx global>{`
-        @keyframes rotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        
-        @keyframes rotate-reverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
-
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.2); }
-        }
-
-        @keyframes float1 {
-          0% { transform: translate(0, 0); }
-          25% { transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 30 - 15}px); }
-          50% { transform: translate(${Math.random() * 40 - 20}px, ${Math.random() * 20 - 10}px); }
-          75% { transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 40 - 20}px); }
-          100% { transform: translate(0, 0); }
-        }
-        
-        @keyframes float2 {
-          0% { transform: translate(0, 0); }
-          33% { transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 20 - 10}px); }
-          66% { transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 30 - 15}px); }
-          100% { transform: translate(0, 0); }
-        }
-        
-        @keyframes float3 {
-          0% { transform: translate(0, 0); }
-          50% { transform: translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px); }
-          100% { transform: translate(0, 0); }
-        }
-        
-        @keyframes float4 {
-          0% { transform: translate(0, 0); }
-          20% { transform: translate(${Math.random() * 25 - 12}px, ${Math.random() * 15 - 7}px); }
-          40% { transform: translate(${Math.random() * 15 - 7}px, ${Math.random() * 25 - 12}px); }
-          60% { transform: translate(${Math.random() * 25 - 12}px, ${Math.random() * 15 - 7}px); }
-          80% { transform: translate(${Math.random() * 15 - 7}px, ${Math.random() * 25 - 12}px); }
-          100% { transform: translate(0, 0); }
-        }
-
-        @keyframes blink {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 };

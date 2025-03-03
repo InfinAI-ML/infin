@@ -3,14 +3,16 @@ import React, { useEffect, useRef } from 'react';
 interface DataFlowAnimationProps {
   primaryColor?: string;
   secondaryColor?: string;
+  particleDensity?: number;
 }
 
 export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({ 
-  primaryColor = "rgba(234, 118, 203, 0.8)", // Default to pink
-  secondaryColor = "rgba(114, 135, 253, 0.5)" // Default to lavender
+  primaryColor = "rgba(56, 189, 248, 0.8)", // Default to cyan/blue
+  secondaryColor = "rgba(96, 165, 250, 0.7)", // Default to lighter blue
+  particleDensity = 1.0 // Multiplier for particle count
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0, radius: 200 });
+  const mouseRef = useRef({ x: 0, y: 0, radius: 180 });
 
   interface Particle {
     x: number;
@@ -21,7 +23,7 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
     baseX: number;
     baseY: number;
     color: string;
-    isPaw: boolean;
+    type: 'circle' | 'square' | 'diamond';
   }
 
   useEffect(() => {
@@ -51,65 +53,68 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
     
     // Particle settings
     const particles: Particle[] = [];
-    const particleCount = isMobile ? 70 : 200; // 70 for mobile, 200 for desktop
-    const connectionDistance = 180;
+    const baseParticleCount = isMobile ? 70 : 150;
+    const particleCount = Math.floor(baseParticleCount * particleDensity);
+    const connectionDistance = 160;
     
-    // Enhanced Catppuccin colors with higher opacity
+    // Professional and consistent colors
     const colors = [
-      primaryColor.replace(/[0-9.]+\)$/, "0.9)"),
-      secondaryColor.replace(/[0-9.]+\)$/, "0.8)"),
-      "rgba(220, 138, 120, 0.9)", // rosewater
-      "rgba(221, 120, 120, 0.9)", // flamingo
-      "rgba(136, 57, 239, 0.8)", // mauve
-      "rgba(32, 159, 181, 0.9)", // sapphire
+      primaryColor,
+      secondaryColor,
+      "rgba(14, 165, 233, 0.7)", // sky blue
+      "rgba(6, 182, 212, 0.6)", // cyan
+      "rgba(2, 132, 199, 0.65)", // darker blue
     ];
+    
+    // Particle types
+    const types: Array<'circle' | 'square' | 'diamond'> = ['circle', 'square', 'diamond'];
     
     // Create particles with base positions and velocities
     for (let i = 0; i < particleCount; i++) {
       const x = Math.random() * canvas.width;
       const y = Math.random() * canvas.height;
-      const isPaw = Math.random() < 0.05; // 5% chance for a particle to be a paw
+      const type = types[Math.floor(Math.random() * 3)];
       
       particles.push({
         x,
         y,
         baseX: x,
         baseY: y,
-        dx: (Math.random() - 0.5) * 0.4, // Slightly slower for more elegance
-        dy: (Math.random() - 0.5) * 0.4,
-        radius: isPaw ? 4 : 2 + Math.random() * 1.5, // Varied sizes for more visual interest
+        dx: (Math.random() - 0.5) * 0.3, // Slower for more professional look
+        dy: (Math.random() - 0.5) * 0.3,
+        radius: 1.5 + Math.random() * 1.2, // Smaller particles for cleaner look
         color: colors[Math.floor(Math.random() * colors.length)],
-        isPaw
+        type
       });
     }
 
-    // Draw a cat paw
-    const drawPaw = (x: number, y: number, size: number, color: string) => {
+    // Draw different particle shapes
+    const drawParticle = (particle: Particle) => {
+      const { x, y, radius, color, type } = particle;
+      
       ctx.fillStyle = color;
       
-      // Main pad
-      ctx.beginPath();
-      ctx.ellipse(x, y, size, size * 0.8, 0, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Toe pads - 3 small circles above the main pad
-      const toeSize = size * 0.5;
-      const toeOffset = size * 0.8;
-      
-      // Left toe
-      ctx.beginPath();
-      ctx.arc(x - toeSize, y - toeOffset, toeSize, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Middle toe
-      ctx.beginPath();
-      ctx.arc(x, y - toeOffset - toeSize * 0.3, toeSize, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Right toe
-      ctx.beginPath();
-      ctx.arc(x + toeSize, y - toeOffset, toeSize, 0, Math.PI * 2);
-      ctx.fill();
+      switch (type) {
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+          
+        case 'square':
+          ctx.fillRect(x - radius * 0.8, y - radius * 0.8, radius * 1.6, radius * 1.6);
+          break;
+          
+        case 'diamond':
+          ctx.beginPath();
+          ctx.moveTo(x, y - radius);
+          ctx.lineTo(x + radius, y);
+          ctx.lineTo(x, y + radius);
+          ctx.lineTo(x - radius, y);
+          ctx.closePath();
+          ctx.fill();
+          break;
+      }
     };
 
     // Animation loop
@@ -122,7 +127,7 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
         particle.x += particle.dx;
         particle.y += particle.dy;
 
-        // Mouse interaction - gentle attraction
+        // Mouse interaction - subtle attraction
         const dx = mouseRef.current.x - particle.x;
         const dy = mouseRef.current.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -131,8 +136,9 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
           const forceDirectionX = dx / distance;
           const forceDirectionY = dy / distance;
           const force = (mouseRef.current.radius - distance) / mouseRef.current.radius;
-          particle.x += forceDirectionX * force * 1.5; // Gentler force
-          particle.y += forceDirectionY * force * 1.5;
+          const maxPush = 1.0; // Limit the maximum force for more controlled movement
+          particle.x += forceDirectionX * force * maxPush;
+          particle.y += forceDirectionY * force * maxPush;
         }
 
         // Bounce off walls with velocity preservation
@@ -145,31 +151,27 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
           particle.y = particle.y <= 0 ? 0 : canvas.height;
         }
 
-        // Draw slightly larger particles
-        if (particle.isPaw) {
-          drawPaw(particle.x, particle.y, particle.radius * 1.5, particle.color);
-        } else {
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.radius * 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = particle.color;
-          ctx.fill();
-        }
+        // Draw the particle
+        drawParticle(particle);
 
-        // Connect particles with gradient lines
+        // Connect particles with gradient lines - optimization: only connect to nearby particles
         particles.slice(i + 1).forEach(otherParticle => {
           const pdx = particle.x - otherParticle.x;
           const pdy = particle.y - otherParticle.y;
           const particleDistance = Math.sqrt(pdx * pdx + pdy * pdy);
 
           if (particleDistance < connectionDistance) {
-            const opacity = 0.5 * (1 - particleDistance/connectionDistance); // Increased opacity
+            // Opacity based on distance - more subtle for professional look
+            const opacity = 0.2 * (1 - particleDistance/connectionDistance);
             
-            // Check if mouse is near the connection
+            // Subtle highlight when mouse is near
+            const midpointX = (particle.x + otherParticle.x) / 2;
+            const midpointY = (particle.y + otherParticle.y) / 2;
             const mouseDistance = Math.sqrt(
-              Math.pow(mouseRef.current.x - (particle.x + otherParticle.x)/2, 2) +
-              Math.pow(mouseRef.current.y - (particle.y + otherParticle.y)/2, 2)
+              (mouseRef.current.x - midpointX) ** 2 + 
+              (mouseRef.current.y - midpointY) ** 2
             );
-            const highlightFactor = mouseDistance < mouseRef.current.radius ? 2.5 : 1;
+            const highlightFactor = mouseDistance < mouseRef.current.radius ? 1.5 : 1;
             
             // Create gradient for connecting lines
             const gradient = ctx.createLinearGradient(
@@ -181,7 +183,6 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
             
             // Helper function to extract RGB and create a valid rgba color
             const getColorWithOpacity = (color: string, opacity: number) => {
-              // Extract RGB values from color string (rgba or rgb)
               const rgbMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/i);
               if (rgbMatch) {
                 const r = rgbMatch[1];
@@ -189,7 +190,7 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
                 const b = rgbMatch[3];
                 return `rgba(${r}, ${g}, ${b}, ${opacity * highlightFactor})`;
               }
-              return color; // Fallback to original color
+              return color;
             };
             
             gradient.addColorStop(0, getColorWithOpacity(particle.color, opacity));
@@ -199,7 +200,7 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
             ctx.strokeStyle = gradient;
-            ctx.lineWidth = 1.5; // Slightly thicker lines
+            ctx.lineWidth = 0.8; // Thinner lines for cleaner look
             ctx.stroke();
           }
         });
@@ -214,16 +215,16 @@ export const DataFlowAnimation: React.FC<DataFlowAnimationProps> = ({
       window.removeEventListener('resize', setCanvasSize);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [primaryColor, secondaryColor]);
+  }, [primaryColor, secondaryColor, particleDensity]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 bg-gradient-to-b from-black to-blue-900"
+      className="fixed inset-0"
       style={{
         background: 'transparent',
-        zIndex: 0, // Make sure this is set correctly
-        pointerEvents: 'none' // Allow interaction with elements behind it
+        zIndex: 0,
+        pointerEvents: 'none'
       }}
     />
   );

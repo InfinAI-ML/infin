@@ -6,9 +6,13 @@ const nextConfig: NextConfig = {
   // basePath should only be used for GitHub Pages, not Vercel
   basePath: process.env.GITHUB_PAGES === 'true' ? '/infinai' : '',
   images: {
-    domains: ["encrypted-tbn0.gstatic.com"],
-    unoptimized: process.env.GITHUB_PAGES === 'true', // Only unoptimize for GitHub Pages
+    unoptimized: process.env.GITHUB_PAGES === 'true',
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: '**' },
+    ],
   },
+
 };
 
 module.exports = nextConfig;
