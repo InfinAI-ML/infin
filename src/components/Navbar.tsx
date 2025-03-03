@@ -7,7 +7,7 @@ import { RiMenu4Line } from 'react-icons/ri';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGlitch } from "react-powerglitch";
 import { Menu, Transition } from "@headlessui/react";
-import NavLogo from '../../public/images/logo.svg';
+import NavLogo from '../../public/images/image(2).svg';
 import { itemsdes1, itemsdes2 } from '@/lib/config';
 import NavItem from './NavItem';
 

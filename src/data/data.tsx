@@ -12,7 +12,7 @@ export const categoriesData = [
   //   gradientTo: "to-indigo-900",
   // },
   {
-    image: "https://imgsrv2.voi.id/WlweOdWbK7_hF4NKf9c7Nx3Q8Tw586VPGfNFnAiIYwQ/auto/1200/675/sm/1/bG9jYWw6Ly8vcHVibGlzaGVycy8yNjI5NjUvMjAyMzAzMTMwODA2LW1haW4uY3JvcHBlZF8xNjc4NjY5NjE2LmpwZWc.jpg", //"https://cdn.moviepilot.de/files/ad45d51c761eb576fe7617589ae61defa6b44713717c365603e73bfc8d22/fill/1200/576/Haikyuu%20-%20Titelbild.jpeg", // Tournament arc themed image from My Hero Academia
+    image: "https://i0.wp.com/www.animefeminist.com/wp-content/uploads/2021/04/Higehiro-Episode-1-1a.jpg?quality=80&ssl=1&strip=info&w=800", //https://cdn.moviepilot.de/files/ad45d51c761eb576fe7617589ae61defa6b44713717c365603e73bfc8d22/fill/1200/576/Haikyuu%20-%20Titelbild.jpeg", // Tournament arc themed image from My Hero Academia
     title: "Events",
     description: "Join our tournaments, hackathons, and collaborative challenges.",
     url: "/events",
@@ -57,7 +57,7 @@ export const categoriesData = [
   //   gradientTo: "to-yellow-900",
   // },
   {
-    image: "https://media.ouest-france.fr/v1/pictures/MjAyMzAxNTQ2MTcyM2JjMmM4NWE2MTMwZTY1MGExYzllZTJhOGI?width=1260&height=708&focuspoint=58%2C51&cropresize=1&client_id=bpeditorial&sign=b1add57133d74183a00168185214c2277286efa7d2525d998f5d2acbd2c3d928", // Pokémon collection themed
+    image: "https://occ-0-8407-92.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABZRdGNHzHpJ9H6nMgtTy5wXYohQuyAefWZQM-lYfIzK72xBEn1NVvx5y8SnnjzmTw-c_gxRJajluQXZnJ0KGlg5ybl1OeTI_6UXX.jpg?r=3cd", // Pokémon collection themed
     title: "Datasets",
     description: "Catch 'em all! Access our curated datasets for your projects.",
     url: "/datasets",
@@ -66,7 +66,7 @@ export const categoriesData = [
     gradientTo: "to-yellow-900",
   },
   {
-    image: "/images/tutorial.svg", // Doraemon gadget themed
+    image: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/765984af-09fb-471b-9e1c-98276354cdb4/deh670i-eab065c1-33a6-4e9c-a94d-ee36e9bbaf87.jpg/v1/fill/w_1280,h_720,q_75,strp/demon_lord_rimuru_by_bdkpatahaty_deh670i-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvNzY1OTg0YWYtMDlmYi00NzFiLTllMWMtOTgyNzYzNTRjZGI0XC9kZWg2NzBpLWVhYjA2NWMxLTMzYTYtNGU5Yy1hOTRkLWVlMzZlOWJiYWY4Ny5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.de5kiFsZ46dKKyQYtZtAfZj0USciVSKuXe3jLxXudTM", // Doraemon gadget themed
     title: "AI Tools & Tutorials",
     description: "Discover magical tools and resources to enhance your AI development.",
     url: "/tools",
