@@ -24,7 +24,7 @@ export const categoriesData = [
     image: "https://static1.cbrimages.com/wordpress/wp-content/uploads/2022/03/makise-kurisu-in-steins-gate-anime-1.jpg", // Mecha/tech themed from Ghost in the Shell
     title: "Projects & Research",
     description: "Explore cutting-edge AI/ML research and technical innovations.",
-    url: "/projects",
+    url: "/projects", 
     animeReference: "Advanced tech inspired by Ghost in the Shell",
     gradientFrom: "from-purple-900",
     gradientTo: "to-pink-900",
@@ -113,11 +113,11 @@ const projectsData = [
     fullDescription: "The Computer Vision Research Lab is a comprehensive repository of computer vision implementations, experiments, and educational materials developed by InfinAI members. The project includes implementations of popular algorithms like YOLO, Mask R-CNN, and ViT, adapted for specific use cases and optimized for educational understanding. Each implementation is accompanied by detailed documentation explaining the mathematical foundations and algorithmic approaches. The lab also includes several novel research contributions in the areas of efficient inference on edge devices and domain adaptation for limited training data scenarios. This project serves both as a learning platform for new members and as a foundation for further research initiatives.",
     image: "/images/computer-vision-lab.jpg",
     tags: ["PyTorch", "OpenCV", "TensorRT", "CUDA"],
-    badge: {text: "ACTIVE", color: "green"},
+    badge: {text: "FUTURE PROJECT", color: "green"},
     team: ["Karthik Reddy", "Nisha Verma", "Arjun Malhotra", "Zara Khan"],
     github: "https://github.com/infinai/cv-lab",
     demoLink: "https://cv-lab.infinai.org",
-    completed: true,
+    completed: false,
     featuredOrder: 3
   },
   {
@@ -127,11 +127,11 @@ const projectsData = [
     fullDescription: "The Data Visualization Toolkit addresses the growing complexity of interpreting machine learning models by providing a comprehensive suite of visualization tools. The toolkit includes interactive dashboards for tracking training metrics, feature importance analyzers, activation map visualizers for neural networks, and decision boundary plotters for classification models. Built with D3.js and React, the system allows researchers to gain deeper insights into model behavior through visual exploration. The toolkit has been adopted by multiple research groups within IITM and has contributed to improved model development cycles by quickly identifying performance bottlenecks and unexpected behaviors.",
     image: "/images/data-viz-toolkit.jpg",
     tags: ["JavaScript", "D3.js", "React", "Python"],
-    badge: {text: "ACTIVE", color: "green"},
+    badge: {text: "FUTURE PROJECT", color: "green"},
     team: ["Rahul Gupta", "Meera Krishnan", "Tanya Shah"],
     github: "https://github.com/infinai/ml-viz-toolkit",
     demoLink: "https://viz.infinai.org",
-    completed: true,
+    completed: false,
     featuredOrder: 4
   },
   {
@@ -141,27 +141,27 @@ const projectsData = [
     fullDescription: "The Reinforcement Learning Platform is a versatile system designed to facilitate experimentation and research in reinforcement learning. The platform includes implementations of classic algorithms (Q-learning, SARSA, DQN) and modern approaches (PPO, SAC, DDPG), along with a variety of customizable environments spanning from classic control problems to more complex robotics simulations. The platform's modular architecture allows researchers to easily swap components, modify reward functions, and benchmark different approaches. Additionally, the system includes tools for hyperparameter optimization, policy visualization, and result analysis. This project has supported several undergraduate research initiatives and has been integrated into the curriculum of advanced AI courses.",
     image: "/images/rl-platform.jpg",
     tags: ["Python", "PyTorch", "OpenAI Gym", "MuJoCo"],
-    badge: {text: "ACTIVE", color: "green"},
+    badge: {text: "FUTURE PROJECT", color: "green"},
     team: ["Aryan Choudhary", "Neha Sharma", "Sam Patel"],
     github: "https://github.com/infinai/rl-platform",
     demoLink: "https://rl.infinai.org",
-    completed: true,
+    completed: false,
     featuredOrder: 5
   },
-  {
-    id: "quantum-ml-research",
-    title: "Quantum Machine Learning Research",
-    description: "Exploring the intersection of quantum computing and machine learning, focusing on quantum neural networks and variational quantum algorithms for optimization problems.",
-    fullDescription: "The Quantum Machine Learning Research project investigates how quantum computing can enhance traditional machine learning approaches. Our work focuses on three main areas: developing variational quantum circuits for classification tasks, exploring quantum-inspired classical algorithms that mimic certain quantum advantages, and creating efficient quantum encodings for high-dimensional data. Using IBM's Qiskit and Google's Cirq frameworks, we've implemented several proof-of-concept models demonstrating potential quantum advantages on specific problem classes. While still largely theoretical, this cutting-edge research positions InfinAI at the forefront of an emerging field with significant future potential.",
-    image: "/images/quantum-ml.jpg",
-    tags: ["Qiskit", "Cirq", "Python", "Linear Algebra"],
-    badge: {text: "RESEARCH", color: "yellow"},
-    team: ["Dr. Anil Kumar", "Shreya Mehta", "Vikrant Singh"],
-    github: "https://github.com/infinai/quantum-ml",
-    demoLink: null,
-    completed: false,
-    featuredOrder: 6
-  }
+  // {
+  //   id: "quantum-ml-research",
+  //   title: "Quantum Machine Learning Research",
+  //   description: "Exploring the intersection of quantum computing and machine learning, focusing on quantum neural networks and variational quantum algorithms for optimization problems.",
+  //   fullDescription: "The Quantum Machine Learning Research project investigates how quantum computing can enhance traditional machine learning approaches. Our work focuses on three main areas: developing variational quantum circuits for classification tasks, exploring quantum-inspired classical algorithms that mimic certain quantum advantages, and creating efficient quantum encodings for high-dimensional data. Using IBM's Qiskit and Google's Cirq frameworks, we've implemented several proof-of-concept models demonstrating potential quantum advantages on specific problem classes. While still largely theoretical, this cutting-edge research positions InfinAI at the forefront of an emerging field with significant future potential.",
+  //   image: "/images/quantum-ml.jpg",
+  //   tags: ["Qiskit", "Cirq", "Python", "Linear Algebra"],
+  //   badge: {text: "RESEARCH", color: "yellow"},
+  //   team: ["Sayan Das", "Shreya Mehta", "Vikrant Singh"],
+  //   github: "https://github.com/infinai/quantum-ml",
+  //   demoLink: null,
+  //   completed: false,
+  //   featuredOrder: 6
+  // }
 ];
 
 // Helper function to get featured projects (sorted by featuredOrder)
